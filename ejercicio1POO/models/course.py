@@ -14,8 +14,9 @@ class Course():
         return self.__teacher
 
     def set_teacher(self, value: Teacher) -> None:
+        ERROR_MESSAGE = "ERROR: El valor debe corresponder a un Profesor."
         if not isinstance(value, Teacher):
-            print ("ERROR: El valor debe corresponder a un Profesor.")
+            raise ValueError(ERROR_MESSAGE)
         self.__teacher = value
 
     def get_students(self) -> list:
@@ -23,9 +24,9 @@ class Course():
     
     def add_student(self, value: Student) -> None:
         if not isinstance(value, Student):
-            print ("ERROR: El valor debe corresponder a un Profesor.")
+            raise ValueError("ERROR: El valor debe corresponder a un Estudiante.")
         if self.searc_student_by_email(value.get_email()) != None:
-            print("ERROR: Ya existe un alumno registrado con este correo electronico.")
+            raise ValueError("ERROR: Ya existe un alumno registrado con este correo electronico.")
         self.__students.append(value)
 
     def searc_student_by_email(self, email: str) -> Student | None:
