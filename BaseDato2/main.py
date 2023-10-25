@@ -12,11 +12,33 @@ def create_movie():
     print("La pelicula fue registrada.")
     connection.commit()
     connection.close()
+
+def find_movie_by_id(id: int):
+    connection = sqlite3.connect(DATA_BASE)
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * FROM Movies WHERE id = {id}")
+    return cursor.fetchone()
+
 def edit_movie():
-    pass
+    movie_id = int(input("Ingrese el identificador de la pelicula: "))
+    record = find_movie_by_id(movie_id)
+    if record == None:
+        print("La pelicula que desea editar no existe.")
+    else:
+        # TODO: Solicitar los nuevos valores para la pelicula mostrando los valores actuales
+        titulo = input("Ingresaar titulo pelicula (Pelicula 1): ")
+        # TODO: validar que valores quiere modificar el usuario
+        # modificar lo singresados por el usuario y mantener los que no ingreso.
+        # TODO: Modificar la pelicula
+        # TODO: informar al usuario de la pelicula modificada
 
 def delete_movie():
-    pass
+    movie_id = int(input("Ingrese el identificador de la pelicula: "))
+    record = find_movie_by_id(movie_id)
+    if record == None:
+        print("La pelicula que desea eliminar no existe.")
+    else:
+        pass
 
 def show_movies():
     pass
