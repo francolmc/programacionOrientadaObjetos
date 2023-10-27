@@ -26,22 +26,51 @@ def edit_movie():
         print("La pelicula que desea editar no existe.")
     else:
         # TODO: Solicitar los nuevos valores para la pelicula mostrando los valores actuales
-        titulo = input("Ingresaar titulo pelicula (Pelicula 1): ")
+        print("Ingresa los valores a modificar, en caso de no moficiar solo preciona enter.")
+        title = input(f"Ingresar titulo pelicula ({record[1]}): ")
+        year = input(f"Ingresar año pelicula ({record[2]}): ")
+        score = input(f"Ingresar puntaje pelicula ({record[3]}): ")
         # TODO: validar que valores quiere modificar el usuario
         # modificar lo singresados por el usuario y mantener los que no ingreso.
+        title_update = record[1]
+        if (len(title)>0):
+            title_update = title
+        year_update = record[2]
+        if (len(year)>0):
+            year_update = year
+        score_update = record[3]
+        if (len(score)>0):
+            score_update = score
         # TODO: Modificar la pelicula
+        connection = sqlite3.connect(DATA_BASE)
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE Movies SET title='{title_update}', year='{year_update}', score='{score_update}' WHERE id='{movie_id}'")
+        connection.commit()
+        connection.close()
         # TODO: informar al usuario de la pelicula modificada
-
+        print("La pelicula fue modificada.")
 def delete_movie():
     movie_id = int(input("Ingrese el identificador de la pelicula: "))
     record = find_movie_by_id(movie_id)
     if record == None:
         print("La pelicula que desea eliminar no existe.")
     else:
-        pass
+        connection = sqlite3.connect(DATA_BASE)
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM Movies WHERE id={movie_id}")
+        connection.commit()
+        connection.close()
+        print("La pelicula fue modificada.")
 
 def show_movies():
-    pass
+    title_filter = input("Ingrese el nombre de la pelicula: ")
+    connection = sqlite3.connect(DATA_BASE)
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT id, title, year, score FROM Movies WHERE title LIKE '%{title_filter}%'")
+    records = cursor.fetchall()
+    for record in records:
+        print(f"id: {record[0]} \t title: {record[1]} \t year: {record[2]} \t score: {record[3]}")
+    connection.close()
 
 def create_table():
     # Crear objeto conexion
@@ -61,6 +90,16 @@ def create_table():
     # Cerrar conexion
     connection.close()
 
+def check_database():
+    try:
+        connection = sqlite3.connect(DATA_BASE)
+        cursor = connection.cursor()
+        cursor.execute("SELECT id FROM Movies LIMIT 1")
+        connection.close()
+    except sqlite3.OperationalError as err:
+        print("ERROR: La tabla Movies no existe, seleccione la opcion 5 para crear la tabla.")
+
+check_database()
 option = 0
 while option != 6:
     print("1.- Buscar peliculas")
