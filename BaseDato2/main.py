@@ -49,6 +49,7 @@ def edit_movie():
         connection.close()
         # TODO: informar al usuario de la pelicula modificada
         print("La pelicula fue modificada.")
+        
 def delete_movie():
     movie_id = int(input("Ingrese el identificador de la pelicula: "))
     record = find_movie_by_id(movie_id)
